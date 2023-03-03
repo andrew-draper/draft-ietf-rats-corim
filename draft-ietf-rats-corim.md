@@ -1119,11 +1119,13 @@ This concludes the initialisation phase.
 
 ## Evidence Collection
 
->>> TODO: Insert DICE/SPDM specific stuff here
+In the evidence collection phase the verifier communicates with attesters to collect evidence. 
+
+The first part of the evidence collection phase does not perform any crypographic validation. This allows verifiers to use untrusted code for their initial evidence collection.
+
+The results of the evidence collection are protocol specific data and transcripts which can be processed by the verifier.
 
 ### Cryptographic validation of Evidence
-
->>> Start review this part
 
 If the authenticity of Evidence is secured by a cryptographic mechanism such as a signature, the first step in the Evidence Appraisal is to perform cryptographic validation of the Evidence.
 
@@ -1149,6 +1151,24 @@ Independent of the specific method, the cryptographic integrity of Evidence MUST
 
 DICE Evidence appears in certificates in the TcbInfo or MultiTcbInfo extension. Each TcbInfo, and each entry in the MultiTcbInfo, is converted to an evidence triple using the rules below.
 
+The verifier SHALL translate each DICE TcbInfo into an evidence-triple as described in this section. The verifier SHALL split each DICE MultiTcbInfo extension into separate TcbInfo object and translate each one into an evidence-triple in the same way.
+
+The verifier SHALL translate each field in the TcbInfo into a field in the created endorsed-triple-record
+
+- The TcbInfo `type` field SHALL be copied to the field named `environment-map / comid.class / comid.class-id`
+- The TcbInfo `vendor` field SHALL be copied to the field named `environment-map / comid.class / comid.vendor`
+- The TcbInfo `model` field SHALL be copied to the field named `environment-map / comid.class / comid.model`
+- The TcbInfo `layer` field SHALL be copied to the field named `environment-map / comid.class / comid.layer`
+- The TcbInfo `index` field SHALL be copied to the field named `environment-map / comid.class / comid.index`
+
+- The TcbInfo `version` field SHALL be translated to the field named `measurement-map / comid.mval / comid.ver`
+> TODO: Details of translation
+- The TcbInfo `svn` field SHALL be copied to the field named `measurement-map / comid.mval / comid.svn`
+- The TcbInfo `fwids` field SHALL be translated to the field named `measurement-map / comid.mval / comid.digests`
+> TODO: Details of translation
+- The TcbInfo `flags` field SHALL be translated to the field named `measurement-map / comid.mval / comid.flags`
+> TODO: Details of translation
+- The TcbInfo `vendorInfo` SHALL shall be copied to the field named `measurement-map / comid.mval / comid.raw-value`
 
 
 >>> TODO: Insert DICE/SPDM specific stuff here
@@ -1156,6 +1176,8 @@ DICE Evidence appears in certificates in the TcbInfo or MultiTcbInfo extension. 
 If there are multiple evidence triples with the same environment map then ...
 
 ### The Accepted Claims Set
+
+>>> Start review this part
 
 At the end of the Evidence collection process evidence has been converted into a format suitable for appraisal. Verifiers are not required to use this as their internal state, but for the purposes of this document a sample verifier is discussed which uses this format.
 
