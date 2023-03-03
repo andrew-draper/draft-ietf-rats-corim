@@ -1119,16 +1119,18 @@ This concludes the initialisation phase.
 
 ## Evidence Collection
 
-> TODO: Insert DICE/SPDM specific stuff here
+>>> TODO: Insert DICE/SPDM specific stuff here
 
 ### Cryptographic validation of Evidence
 
-If the authenticity of Evidence is secured by a cryptographic signature, the first step in the Evidence Appraisal is to validate that cryptographic signature over the Evidence.
+>>> Start review this part
 
-The exact cryptographic signature validation mechanics depend on the specific Evidence format.
+If the authenticity of Evidence is secured by a cryptographic mechanism such as a signature, the first step in the Evidence Appraisal is to perform cryptographic validation of the Evidence.
+
+The exact cryptographic signature validation mechanics depend on the specific Evidence collection protocol.
 
 For example:
-In DICE, a suitable certification path anchored on a trusted root certificate is looked up -- e.g., based on linking information obtained from the DeviceID certificate (see Section 9.2.1 of [DICE Layering Architecture](https://trustedcomputinggroup.org/wp-content/uploads/DICE-Layering-Architecture-r19_pub.pdf))-- in the Appraisal Context.  If found, then usual X.509 certificate validation is performed.
+In DICE, a proof of liveness is performed on the final key in the certificate chain. If this passes then a suitable certification path anchored on a trusted root certificate is looked up -- e.g., based on linking information obtained from the DeviceID certificate (see Section 9.2.1 of [DICE Layering Architecture](https://trustedcomputinggroup.org/wp-content/uploads/DICE-Layering-Architecture-r19_pub.pdf))-- in the Appraisal Context.  If found, then usual X.509 certificate validation is performed.
 In PSA, the verification public key is looked up in the appraisal context using the `euid` claim found in the PSA claims-set (see [Section 4.2.1 of I-D.tschofenig-rats-psa-token](https://www.ietf.org/archive/id/draft-tschofenig-rats-psa-token-10.html#name-instance-id).  If found, COSE Sign1 verification is performed accordingly.
 
 Independent of the specific method, the cryptographic integrity of Evidence MUST be successfully verified.
@@ -1139,20 +1141,32 @@ Independent of the specific method, the cryptographic integrity of Evidence MUST
 > * How key material is associated with the Attesting Environment
 > * How the Attesting Environment is identified in Evidence
 
-### Transforming Evidence to a format usable for matching
+### Transforming SPDM Evidence to a format usable for matching
 
-> TODO: Insert DICE/SPDM specific stuff here
+***Evidence Binding For SPDM*** describes the process by which evidence in a SPDM MEASUREMENTS response is converted to Evidence suitable for matching using the rules below. The converted evidence is held in evidence triples which have a similar format to reference-triples (their semantics is described below).
+
+### Transforming DICE Evidence to a format usable for matching
+
+DICE Evidence appears in certificates in the TcbInfo or MultiTcbInfo extension. Each TcbInfo, and each entry in the MultiTcbInfo, is converted to an evidence triple using the rules below.
+
+
+
+>>> TODO: Insert DICE/SPDM specific stuff here
+
+If there are multiple evidence triples with the same environment map then ...
 
 ### The Accepted Claims Set
 
-At the end of the Evidence collection process the 
+At the end of the Evidence collection process evidence has been converted into a format suitable for appraisal. Verifiers are not required to use this as their internal state, but for the purposes of this document a sample verifier is discussed which uses this format.
+
+The Internal structure is based on 
 
 ## Evidence appraisal
 
 In the Evidence Appraisal phase, a CoRIM Appraisal Context and an Evidence Appraisal Policy are used to convert the received Evidence from its raw form into a more usable form. This phase may be repeated multiple times .
 The outcome of the appraisal process is summarised in an Attestation Result.
 
->>>>>> Start unedited parts
+>>> Start need to review
 
 The Attestation Result provides a set of trust metrics associated with the appraised Evidence together with any information that can be derived by the Verifier about the Attester via supply chain endorsements.
 The Relying Party application uses the content of the Attestation Result to make its own policy decisions.
@@ -1184,6 +1198,8 @@ Evidence MUST match the identified Reference Values.
 
 ### Adding Endorsed Values to the Accepted Claims
 
+>>> TODO
+
 The third step consists in matching Endorsed Values in the Appraisal Context with Evidence.
 
 The Target and Attested Environment associated with Evidence need to be identified.
@@ -1201,7 +1217,7 @@ Any matched Endorsed Value can be added to the Attestation Result.
 > * How Endorsed Values are associated with the Target and Attesting Environments
 > * How the Target and Attesting Environments are identified in Evidence
 
->>>>>> End
+>>> End need to review
 
 
 
